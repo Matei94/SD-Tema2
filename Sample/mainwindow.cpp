@@ -1,5 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "SpacePressEater.h"
+
 #include <iostream>
 
 int MainWindow::height = 640;
@@ -10,7 +12,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    this->setWindowTitle("SD editor");
+    this->setWindowTitle("SD super editor");
     this->resize(this->height, this->width);
 
     //Cut button
@@ -46,21 +48,35 @@ MainWindow::MainWindow(QWidget *parent) :
     //Text area
     this->textArea = new QTextEdit(this);
     this->textArea->setGeometry(1, 50, 638, 429);
+
+    SpacePressEater *spe = new SpacePressEater();
+    textArea->installEventFilter(spe);
 }
 
 void MainWindow::Cut()
 {
-    std::cout << "Cut\n";
+    QTextCursor cursor = this->textArea->textCursor();
+    int start = cursor.selectionStart();
+    int stop = cursor.selectionEnd();
+
+    std::cout << "Cut from " << start << " to " << stop << "\n";
 }
 
 void MainWindow::Copy()
 {
-    std::cout << "Copy\n";
+    QTextCursor cursor = this->textArea->textCursor();
+    int start = cursor.selectionStart();
+    int stop = cursor.selectionEnd();
+
+    std::cout << "Copy from " << start << " to " << stop << "\n";
 }
 
 void MainWindow::Paste()
 {
-    std::cout << "Paste\n";
+    QTextCursor cursor = this->textArea->textCursor();
+    int position = cursor.position();
+
+    std::cout << "Paste at " << position << "\n";
 }
 
 void MainWindow::Undo()

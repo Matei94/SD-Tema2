@@ -5,6 +5,7 @@
 #include <QPushButton>
 #include <QTextEdit>
 #include <QScrollBar>
+#include <QTextCursor>
 
 namespace Ui {
 class MainWindow;
