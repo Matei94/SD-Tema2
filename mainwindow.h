@@ -6,6 +6,7 @@
 #include <QTextEdit>
 #include <QScrollBar>
 #include <QTextCursor>
+#include <SpacePressEater.h>
 
 namespace Ui {
 class MainWindow;
@@ -18,12 +19,16 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
+    void insertCharAtCursor(QString *x);
+
+
+    QTextEdit *textArea;
+    SpacePressEater *spe;
 
 private:
     Ui::MainWindow *ui;
     static int height;
     static int width;
-    QTextEdit *textArea;
 
 private slots:
     void Cut();
