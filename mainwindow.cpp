@@ -49,8 +49,18 @@ MainWindow::MainWindow(QWidget *parent) :
     this->textArea = new QTextEdit(this);
     this->textArea->setGeometry(1, 50, 638, 429);
 
-    this->spe = new SpacePressEater(this->textArea, this);
+    this->spe = new SpacePressEater(this);
     textArea->installEventFilter(this->spe);
+}
+
+void MainWindow::sendNewText()
+{
+    const QString text = this->textArea->toPlainText();
+    int start = text.lastIndexOf(' ', text.size() - 2) + 1;
+    int len = text.size() - start - 1;
+
+    std::cout << "New text \"" << text.mid(start, len).toUtf8().constData() << "\" from " << start << std::endl;
+
 }
 
 void MainWindow::Cut()

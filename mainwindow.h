@@ -23,8 +23,7 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
-    void insertCharAtCursor(QString *x);
-
+    void sendNewText();
 
     QTextEdit *textArea;
     SpacePressEater *spe;

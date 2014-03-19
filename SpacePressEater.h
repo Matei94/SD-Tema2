@@ -16,12 +16,11 @@ class SpacePressEater : public QObject
 {
      Q_OBJECT
 
-    QTextEdit *boss;
     QString delim;
-    MainWindow *newboss;
+    MainWindow *boss;
 
 public:
-    SpacePressEater(QTextEdit *boss, MainWindow *newboss);
+    SpacePressEater(MainWindow *boss);
     bool eventFilter(QObject *obj, QEvent *event);
  };
 

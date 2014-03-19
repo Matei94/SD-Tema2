@@ -1,10 +1,9 @@
 #include "SpacePressEater.h"
 
-SpacePressEater::SpacePressEater(QTextEdit *boss, MainWindow *newboss)
+SpacePressEater::SpacePressEater(MainWindow *boss)
 {
     this->boss = boss;
     this->delim = " ";
-    this->newboss = newboss;
 }
 
 bool SpacePressEater::eventFilter(QObject *obj, QEvent *event) {
@@ -13,7 +12,8 @@ bool SpacePressEater::eventFilter(QObject *obj, QEvent *event) {
        //std::cout << "Ate key press ";// << keyEvent->key();
 
        if (keyEvent->key() == Qt::Key_Space) {
-           this->newboss->textArea->insertPlainText(this->delim);
+           this->boss->textArea->insertPlainText(this->delim);
+           this->boss->sendNewText();
            qDebug("Spatiu");
            return true;
        }
