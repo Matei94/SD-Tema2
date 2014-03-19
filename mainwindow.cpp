@@ -49,7 +49,7 @@ MainWindow::MainWindow(QWidget *parent) :
     this->textArea = new QTextEdit(this);
     this->textArea->setGeometry(1, 50, 638, 429);
 
-    this->spe = new SpacePressEater(this->textArea);
+    this->spe = new SpacePressEater(this->textArea, this);
     textArea->installEventFilter(this->spe);
 }
 

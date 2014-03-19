@@ -16,7 +16,8 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp
+        mainwindow.cpp\
+		SpacePressEater.cpp
 
 HEADERS  += mainwindow.h\
 		 SpacePressEater.h

@@ -12,9 +12,13 @@ namespace Ui {
 class MainWindow;
 }
 
+class SpacePressEater;
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
+
+    friend class SpacePressEater;
 
 public:
     explicit MainWindow(QWidget *parent = 0);
