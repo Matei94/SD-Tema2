@@ -49,8 +49,21 @@ MainWindow::MainWindow(QWidget *parent) :
     this->textArea = new QTextEdit(this);
     this->textArea->setGeometry(1, 50, 638, 429);
 
+    // SpacePressEater
     this->spe = new SpacePressEater(this);
     textArea->installEventFilter(this->spe);
+}
+
+QString MainWindow::getText() {
+    QString text = this->textArea->toPlainText();
+    return text;
+}
+
+void MainWindow::moveCursorAtBeginOfWord() {
+    QTextCursor cursor = this->textArea->textCursor();
+//    cursor.movePosition(QTextCursor::StartOfWord);
+    cursor.setPosition(0);
+    std::cout << "Done: " << cursor.position();
 }
 
 // Function that gets called each time we get a space_button press

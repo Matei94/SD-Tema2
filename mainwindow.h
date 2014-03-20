@@ -25,6 +25,8 @@ public:
     ~MainWindow();
     void sendNewText();
     bool selectWordAtCursor();
+    void moveCursorAtBeginOfWord();
+    QString getText();
 
     QTextEdit *textArea;
     SpacePressEater *spe;

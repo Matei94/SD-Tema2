@@ -8,6 +8,7 @@
 #include <QTextEdit>
 #include <QScrollBar>
 #include <QTextCursor>
+#include <QString>
 #include "mainwindow.h"
 
 class MainWindow;
@@ -22,9 +23,13 @@ class SpacePressEater : public QObject
     int sel_start;
     int sel_end;
 
+    bool insertAtMiddle;
+    int newWordStart;
+
 public:
     SpacePressEater(MainWindow *boss);
     bool eventFilter(QObject *obj, QEvent *event);
+    bool manageSpaceKeyPress();
  };
 
 #endif
