@@ -24,6 +24,7 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
     void sendNewText();
+    bool selectWordAtCursor();
 
     QTextEdit *textArea;
     SpacePressEater *spe;

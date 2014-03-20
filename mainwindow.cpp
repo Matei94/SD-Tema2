@@ -64,6 +64,53 @@ void MainWindow::sendNewText()
     std::cout << "New text \"" << text.mid(start, len).toUtf8().constData() << "\" from " << start << std::endl;
 }
 
+bool MainWindow::selectWordAtCursor()
+{
+    int old_pos = -1;
+    const QString text = this->textArea->toPlainText();
+    QTextCursor cursor = this->textArea->textCursor();
+
+    // Don't erase the first word
+    old_pos = cursor.position();
+    cursor.movePosition(QTextCursor::Left);
+
+    // We're on the first position in text, don't select anything
+    if (old_pos == cursor.position()) {
+        std::cout << "case 1\n";
+        return false;
+    }
+
+    // Use StartOfWord and EndOfWord selection only when we have
+    // a valid word (lenght > 0)
+    if (cursor.position() - 1 > 0 && ' ' != text.at(cursor.position() - 1)) {
+
+        // Position the cursor
+        cursor.movePosition(QTextCursor::StartOfWord);
+        std::cout << cursor.anchor() << " " << cursor.position() << " \n";
+        cursor.movePosition(QTextCursor::EndOfWord, QTextCursor::KeepAnchor);
+
+    }
+    // We should select only words that have 1 space after them
+    // (That have been submitted already)
+    old_pos = cursor.position();
+    cursor.movePosition(QTextCursor::Right, QTextCursor::KeepAnchor);
+    std::cout << cursor.anchor() << " " << cursor.position() << " \n";
+
+    if (old_pos == cursor.position()) {
+        std::cout << "case 2\n";
+        return false;
+    }
+
+
+    // Since we can't alter the text cursor in the text area directly we need
+    // to replace the cursor with ours
+    QTextCursor &x = cursor;
+    this->textArea->setTextCursor(x);
+
+    std::cout << "case ok\n";
+    return true;
+}
+
 void MainWindow::Cut()
 {
     QTextCursor cursor = this->textArea->textCursor();

@@ -18,6 +18,9 @@ class SpacePressEater : public QObject
 
     QString delim;
     MainWindow *boss;
+    int mode;
+    int sel_start;
+    int sel_end;
 
 public:
     SpacePressEater(MainWindow *boss);
