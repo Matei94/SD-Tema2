@@ -53,14 +53,15 @@ MainWindow::MainWindow(QWidget *parent) :
     textArea->installEventFilter(this->spe);
 }
 
+// Function that gets called each time we get a space_button press
+// Sends to the backend the last piece of added text and
 void MainWindow::sendNewText()
 {
     const QString text = this->textArea->toPlainText();
-    int start = text.lastIndexOf(' ', text.size() - 2) + 1;
-    int len = text.size() - start - 1;
+    int start = text.lastIndexOf(' ', this->textArea->textCursor().position() - 2) + 1;
+    int len = text.indexOf(' ', start + 1) - start;
 
     std::cout << "New text \"" << text.mid(start, len).toUtf8().constData() << "\" from " << start << std::endl;
-
 }
 
 void MainWindow::Cut()
