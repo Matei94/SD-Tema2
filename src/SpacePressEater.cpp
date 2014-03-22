@@ -46,22 +46,6 @@ bool SpacePressEater::eventFilter(QObject *obj, QEvent *event) {
 
         this->mode = NORMMODE;
 
-        // Avoid writing at begging of words
-        int key = keyEvent->key();
-        const QString text = this->boss->textArea->toPlainText();
-        QTextCursor cursor = this->boss->textArea->textCursor();    
-
-        if (0x41 <= key && key <= 0x5a) { // A letter was pressed
-            if (cursor.position() == 0 && !cursor.atEnd()) {
-                qDebug("Don't write it 1");
-                return true;
-            }
-            if (!cursor.atEnd() && text.at(cursor.position() - 1) == ' ' && !this->insertAtMiddle) {
-                qDebug("Don't write it 2");
-                return true;
-            }
-        }
-
         // Manage space key press
         if (keyEvent->key() == Qt::Key_Space) {
             return this->manageSpaceKeyPress();
@@ -79,15 +63,21 @@ bool SpacePressEater::manageSpaceKeyPress() {
     const QString text = this->boss->textArea->toPlainText();
     QTextCursor cursor = this->boss->textArea->textCursor();
 
-    // No empty words allowed
-    if (cursor.position() == 0 || text.at(cursor.position() - 1) == ' ') {
-        this->newWordStart = cursor.position();
+    int oldPos = cursor.position();
 
-        qDebug("No empty words allowed");
+    if (cursor.position() - 1 > 0 && ' ' == text.at(cursor.position() - 1)) {
+        cursor.movePosition(QTextCursor::StartOfWord);
+        this->boss->textArea->setTextCursor(cursor);
         return true;
     }
 
+    this->boss->sendNewText();
+    this->boss->textArea->insertPlainText(this->delim);
+
+    return true;
+
     // Cursor is at the end of document
+    /*
     if (cursor.atEnd()) {
         this->boss->textArea->insertPlainText(this->delim);
 
@@ -96,6 +86,8 @@ bool SpacePressEater::manageSpaceKeyPress() {
         qDebug("atEnd");
         return true;
     }
+    
+    this->insertAtMiddle = true;
 
     if (!insertAtMiddle) {
         // Cursor is in the middle of the word
@@ -120,17 +112,14 @@ bool SpacePressEater::manageSpaceKeyPress() {
         }
     } else {
         if (cursor.position() - 1 > 0 && ' ' != text.at(cursor.position() - 1)) {
-            int oldPos = cursor.position();
             cursor.movePosition(QTextCursor::StartOfWord);
+            this->boss->textArea->setTextCursor(cursor);
+        }
 
-            if (this->newWordStart == cursor.position()) {
-                cursor.setPosition(oldPos);
-                this->boss->textArea->insertPlainText(this->delim);
+            cursor.setPosition(oldPos);
+            this->boss->sendNewText();
+            this->boss->textArea->insertPlainText(this->delim);
 
-                cursor.movePosition(QTextCursor::End);
-                this->boss->textArea->setTextCursor(cursor);
-
-                this->insertAtMiddle = false;
 
                 qDebug("Aleluia");
                 return true;
@@ -144,4 +133,5 @@ bool SpacePressEater::manageSpaceKeyPress() {
     }
 
     return false;
+    */
 }
