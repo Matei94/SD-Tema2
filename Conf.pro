@@ -30,3 +30,6 @@ FORMS    += include/mainwindow.ui
 OBJECTS_DIR = build/
 UI_DIR = build/
 MOC_DIR = build/
+
+LIBS += backend_src/lib-backend.so
+PRE_TARGETDEPS += backend_src/lib-backend.so
