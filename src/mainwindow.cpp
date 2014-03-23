@@ -15,6 +15,8 @@ MainWindow::MainWindow(QWidget *parent) :
     this->setWindowTitle("SD super editor");
     this->resize(this->height, this->width);
 
+    sv = new Backend();
+
     //Cut button
     QPushButton *cut = new QPushButton("cut", this);
     cut->setGeometry(1, 16, 35, 25);
@@ -61,9 +63,7 @@ QString MainWindow::getText() {
 
 void MainWindow::moveCursorAtBeginOfWord() {
     QTextCursor cursor = this->textArea->textCursor();
-//    cursor.movePosition(QTextCursor::StartOfWord);
     cursor.setPosition(0);
-    std::cout << "Done: " << cursor.position();
 }
 
 // Function that gets called each time we get a space_button press
@@ -72,9 +72,16 @@ void MainWindow::sendNewText()
 {
     const QString text = this->textArea->toPlainText();
     int start = text.lastIndexOf(' ', this->textArea->textCursor().position() - 2) + 1;
-    int len = text.indexOf(' ', start + 1) - start;
 
-    std::cout << "New text \"" << text.mid(start, len).toUtf8().constData() << "\" from " << start << std::endl;
+    std::cout << this->textArea->textCursor().position() << "\n";
+    if (this->textArea->textCursor().position() == 1)
+        start = 0;
+
+    int len = text.indexOf(' ', start + 1) - start;
+    len = this->textArea->textCursor().position() - 1 - start;
+
+    //std::cout << "New text \"" << text.mid(start, len).toUtf8().constData() << "\" from " << start << std::endl;
+    sv->Add(start, text.mid(start, len).toUtf8().constData());
 }
 
 bool MainWindow::selectWordAtCursor()
@@ -89,20 +96,20 @@ bool MainWindow::selectWordAtCursor()
 
     // We're on the first position in text, don't select anything
     if (old_pos == cursor.position()) {
-        std::cout << "case 1\n";
+        //std::cout << "case 1\n";
         return false;
     }
 
     // Use StartOfWord and EndOfWord selection only when we have
     // a valid word (lenght > 0)
-    if (cursor.position() - 1 > 0 && ' ' != text.at(cursor.position() - 1)) {
+    if (cursor.position() - 1 >= -1 && ' ' != text.at(cursor.position() - 1)) {
 
         // Position the cursor
         cursor.movePosition(QTextCursor::StartOfWord);
-        std::cout << cursor.anchor() << " " << cursor.position() << " \n";
+        //std::cout << cursor.anchor() << " " << cursor.position() << " \n";
         cursor.movePosition(QTextCursor::EndOfWord, QTextCursor::KeepAnchor);
-
     }
+
     // We should select only words that have 1 space after them
     // (That have been submitted already)
     old_pos = cursor.position();
@@ -110,7 +117,7 @@ bool MainWindow::selectWordAtCursor()
     std::cout << cursor.anchor() << " " << cursor.position() << " \n";
 
     if (old_pos == cursor.position()) {
-        std::cout << "case 2\n";
+        //std::cout << "case 2\n";
         return false;
     }
 
@@ -120,7 +127,7 @@ bool MainWindow::selectWordAtCursor()
     QTextCursor &x = cursor;
     this->textArea->setTextCursor(x);
 
-    std::cout << "case ok\n";
+    //std::cout << "case ok\n";
     return true;
 }
 
@@ -130,7 +137,8 @@ void MainWindow::Cut()
     int start = cursor.selectionStart();
     int stop = cursor.selectionEnd();
 
-    std::cout << "Cut from " << start << " to " << stop << "\n";
+    //std::cout << "Cut from " << start << " to " << stop << "\n";
+    sv->Cut(start, stop);
 }
 
 void MainWindow::Copy()
@@ -139,7 +147,8 @@ void MainWindow::Copy()
     int start = cursor.selectionStart();
     int stop = cursor.selectionEnd();
 
-    std::cout << "Copy from " << start << " to " << stop << "\n";
+    //std::cout << "Copy from " << start << " to " << stop << "\n";
+    sv->Copy(start, stop);
 }
 
 void MainWindow::Paste()
@@ -147,17 +156,20 @@ void MainWindow::Paste()
     QTextCursor cursor = this->textArea->textCursor();
     int position = cursor.position();
 
-    std::cout << "Paste at " << position << "\n";
+    //std::cout << "Paste at " << position << "\n";
+    sv->Paste(position);
 }
 
 void MainWindow::Undo()
 {
-    std::cout << "Undo\n";
+    //std::cout << "Undo\n";
+    sv->Undo();
 }
 
 void MainWindow::Redo()
 {
-    std::cout << "Redo\n";
+    //std::cout << "Redo\n";
+    sv->Redo();
 }
 
 void MainWindow::Save()

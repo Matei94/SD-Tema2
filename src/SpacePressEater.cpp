@@ -63,75 +63,25 @@ bool SpacePressEater::manageSpaceKeyPress() {
     const QString text = this->boss->textArea->toPlainText();
     QTextCursor cursor = this->boss->textArea->textCursor();
 
-    int oldPos = cursor.position();
+    // We are in the middle of a word (that includes just at it's end
+    /*
+    if (cursor.position() - 1 >= -1 && ' ' != text.at(cursor.position() - 1)) {
+        int oldPos = cursor.position();
 
-    if (cursor.position() - 1 > 0 && ' ' == text.at(cursor.position() - 1)) {
-        cursor.movePosition(QTextCursor::StartOfWord);
-        this->boss->textArea->setTextCursor(cursor);
-        return true;
+        cursor.movePosition(QTextCursor::EndOfWord);
+
+        if (text.at(cursor.position()) == ' ') {
+           cursor.movePosition(QTextCursor::StartOfWord);
+           this->boss->textArea->setTextCursor(cursor);
+           return true;
+
+        } else {
+            cursor.setPosition(oldPos);
+        }
     }
-
-    this->boss->sendNewText();
+    */
     this->boss->textArea->insertPlainText(this->delim);
+    this->boss->sendNewText();
 
     return true;
-
-    // Cursor is at the end of document
-    /*
-    if (cursor.atEnd()) {
-        this->boss->textArea->insertPlainText(this->delim);
-
-        this->insertAtMiddle = false;
-
-        qDebug("atEnd");
-        return true;
-    }
-    
-    this->insertAtMiddle = true;
-
-    if (!insertAtMiddle) {
-        // Cursor is in the middle of the word
-        if (cursor.position() - 1 > 0 && ' ' != text.at(cursor.position() - 1)) {
-            // Move cursor at the begining of the current word
-            cursor.movePosition(QTextCursor::StartOfWord);
-            this->boss->textArea->setTextCursor(cursor);
-
-            this->insertAtMiddle = true;
-            this->newWordStart = cursor.position();
-
-            qDebug("iM false");
-            return true;
-        }
-
-        if (cursor.position() - 1 > 0 && ' ' == text.at(cursor.position() - 1)) {
-            this->insertAtMiddle = true;
-            this->newWordStart = cursor.position();
-
-            qDebug("DO NOTHING");
-            return true;
-        }
-    } else {
-        if (cursor.position() - 1 > 0 && ' ' != text.at(cursor.position() - 1)) {
-            cursor.movePosition(QTextCursor::StartOfWord);
-            this->boss->textArea->setTextCursor(cursor);
-        }
-
-            cursor.setPosition(oldPos);
-            this->boss->sendNewText();
-            this->boss->textArea->insertPlainText(this->delim);
-
-
-                qDebug("Aleluia");
-                return true;
-            } else {
-                cursor.setPosition(oldPos);
-
-                qDebug("BAD BAD BAD");
-                return true;
-            }
-        }
-    }
-
-    return false;
-    */
 }

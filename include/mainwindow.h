@@ -7,6 +7,7 @@
 #include <QScrollBar>
 #include <QTextCursor>
 #include <SpacePressEater.h>
+#include <backend.h>
 
 namespace Ui {
 class MainWindow;
@@ -30,6 +31,7 @@ public:
 
     QTextEdit *textArea;
     SpacePressEater *spe;
+    Backend *sv;
 
 private:
     Ui::MainWindow *ui;

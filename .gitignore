@@ -1,0 +1,6 @@
+Conf.pro.user
+Makefile
+build/*
+backend_src/*.o
+backend_src/*.so
+sd_editor
