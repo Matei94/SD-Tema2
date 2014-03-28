@@ -61,6 +61,7 @@ bool SpacePressEater::manageSpaceKeyPress() {
     const QString text = this->boss->textArea->toPlainText();
     QTextCursor cursor = this->boss->textArea->textCursor();
 
+    this->boss->textArea->insertPlainText(this->delim);
     this->boss->sendNewText();
     this->boss->textArea->setText(this->boss->sv->GetText());
 
